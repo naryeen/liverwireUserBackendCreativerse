@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PermissionResource\Pages;
-use App\Filament\Resources\PermissionResource\RelationManagers;
-use App\Models\Permission;
+use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Resources\PostResource\RelationManagers;
+use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,36 +13,32 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
-class PermissionResource extends Resource
-{
-    protected static ?string $model = Permission::class;
+use Filament\Forms\Components\TextInput;
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
-     // aligning which one is to be stacked like in position 1, 2, 3, 4,..
-    protected static ?int $navigationSort = 3;
-    protected static ?string $navigationGroup = 'Settings';
+class PostResource extends Resource
+{
+    protected static ?string $model = Post::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
-                // Card::make()->schema([
-                //     TextInput::make('name')
-                //     ->minLength(2)
-                //     ->maxLength(255)
-                //     ->required()
-                //     ->unique()
-                // ])
                 Section::make()->schema([
-                    TextInput::make('name')
+                    TextInput::make('title')
                         ->minLength(2)
                         ->maxLength(255)
                         ->required()
                         ->unique(ignoreRecord: true),
+                        TextInput::make('content')
+                        ->minLength(2)
+                        ->maxLength(1500)
+                        ->required()
+                        ->unique(ignoreRecord: true),
                 ]),
-               
             ]);
     }
 
@@ -52,17 +47,14 @@ class PermissionResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('name'),
-                TextColumn::make('created_at')
-                    ->dateTime('d-M-Y')->sortable(),
+                TextColumn::make('title')->searchable(),
+                // TextColumn::make('content')->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -84,9 +76,9 @@ class PermissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPermissions::route('/'),
-            'create' => Pages\CreatePermission::route('/create'),
-            'edit' => Pages\EditPermission::route('/{record}/edit'),
+            'index' => Pages\ListPosts::route('/'),
+            'create' => Pages\CreatePost::route('/create'),
+            'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }    
 }
