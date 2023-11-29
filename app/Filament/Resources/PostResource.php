@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 
 class PostResource extends Resource
 {
@@ -33,11 +34,11 @@ class PostResource extends Resource
                         ->maxLength(255)
                         ->required()
                         ->unique(ignoreRecord: true),
-                        TextInput::make('content')
-                        ->minLength(2)
-                        ->maxLength(1500)
-                        ->required()
-                        ->unique(ignoreRecord: true),
+
+                    Textarea::make('content')
+                        ->rows(10)
+                        ->cols(20)
+                        ->required(),
                 ]),
             ]);
     }
@@ -49,12 +50,14 @@ class PostResource extends Resource
                 //
                 TextColumn::make('title')->searchable(),
                 // TextColumn::make('content')->searchable(),
+                // TextArea::make('content')->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -65,14 +68,14 @@ class PostResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -80,5 +83,5 @@ class PostResource extends Resource
             'create' => Pages\CreatePost::route('/create'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
-    }    
+    }
 }

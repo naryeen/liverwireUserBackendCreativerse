@@ -14,7 +14,7 @@ class PermissionPolicy
     public function viewAny(User $user)
     {
         //
-        return $user->hasRole(['Admin','Moderator']);
+        return $user->hasRole(['Admin','Moderator','Writer']);
     }
 
     /**

@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable /////implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -51,9 +51,9 @@ class User extends Authenticatable implements FilamentUser
      * @param Filament\Panel $panel
      * @return bool
      */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        // Your logic here, for example:
-        return $this->hasRole(['Admin','Writer','Moderator']);
-    }
+    // public function canAccessPanel(Panel $panel): bool
+    // {
+    //     // Your logic here, for example:
+    //     return $this->hasRole(['Admin','Writer','Moderator']);
+    // }
 }
